@@ -1,7 +1,7 @@
 /* HM Lane — service worker: offline app shell. */
-var CACHE = 'hmlane-v5';
+var CACHE = 'hmlane-v6';
 var SHELL = [
-  './', 'index.html', 'styles.css', 'app.js', 'plan.js', 'exercises.js',
+  './', 'index.html', 'styles.css', 'app.js', 'plan.js', 'exercises.js', 'logic.js',
   'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/icon-180.png'
 ];

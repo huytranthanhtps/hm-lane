@@ -91,6 +91,39 @@ button{font-family:inherit;cursor:pointer}
 .tick.done{background:transparent;color:var(--mint);border:1.5px solid var(--mint-deep)}
 .tick svg{width:18px;height:18px}
 .subnote{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);margin-top:14px;line-height:1.5;letter-spacing:.02em}
+.card-top .from{color:var(--mint)}
+.card.skipped{opacity:.72}
+/* action buttons */
+.actions{display:flex;gap:8px;margin-top:10px}
+.btn-ghost{flex:1;border-radius:12px;padding:12px 10px;font-family:var(--body);font-weight:600;font-size:13px;
+  color:var(--chalk-dim);background:rgba(242,236,224,.05);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .12s ease}
+.btn-ghost:active{transform:scale(.98)}
+.move-picker{margin-top:10px;padding:14px;border-radius:14px;background:rgba(242,236,224,.03);border:1px solid var(--line-soft)}
+.move-picker .mp-h{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-faint);margin-bottom:10px}
+.mp-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.mp-opt{border-radius:10px;padding:10px 13px;font-family:var(--mono);font-size:12px;font-weight:700;
+  color:var(--rust-glow);background:rgba(210,78,27,.12);border:1px solid rgba(210,78,27,.4)}
+.mp-opt:active{transform:scale(.97)}
+.mp-empty{font-family:var(--mono);font-size:12px;color:var(--chalk-faint)}
+.state-note{margin-top:12px;padding:13px 15px;border-radius:12px;font-size:13px;color:var(--chalk-dim);
+  background:rgba(242,236,224,.04);border:1px solid var(--line-soft);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.state-note b{color:var(--chalk)}
+.state-sub{margin-top:10px;text-align:center}
+.link-btn{background:none;border:none;color:var(--rust-glow);font-family:var(--mono);font-size:12px;padding:4px;text-decoration:underline;flex-shrink:0}
+/* week statuses */
+.day.skipped{opacity:.6}
+.day.skipped .dname{text-decoration:line-through;text-decoration-color:var(--line)}
+.day.skipped .dot{color:var(--chalk-faint);border-color:var(--line-soft)}
+.day.moved{opacity:.7}
+.day.moved .dot{color:var(--mint-deep);border-color:rgba(57,179,148,.3)}
+.day.moved .dname{color:var(--chalk-dim)}
+.day.missed .dot{border-color:rgba(210,78,27,.28)}
+/* month statuses */
+.cal-cell.skipped{background:repeating-linear-gradient(45deg,rgba(167,158,142,.16) 0 4px,transparent 4px 8px);border-color:var(--line-soft)}
+.cal-cell.skipped .dn{color:var(--chalk-faint)}
+.cal-cell.moved{border-style:dashed;border-color:rgba(111,224,192,.35)}
+.cal-cell.moved .dn{color:var(--mint-deep)}
 
 /* ---------- exercise list ---------- */
 .ex-head{display:flex;justify-content:space-between;align-items:baseline;margin:18px 2px 4px}
