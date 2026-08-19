@@ -40,6 +40,12 @@ const PHASE_LABEL = {
   taper: 'Taper',
 };
 
+// Pace gợi ý theo giai đoạn (easy chậm hơn pace 10k để xây nền + bảo vệ chân)
+function easyPace(phase) {
+  return (phase === 'reset' || phase === 'base') ? '9:00–9:45/km' : '8:40–9:20/km';
+}
+const GOAL_PACE_VAL = '~8:30/km';
+
 const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
 const round = (n) => Math.round(n);
 
@@ -138,6 +144,18 @@ function race() {
 }
 
 function finalizeWeek(idx, spec, days, weekKm) {
+  // gắn pace gợi ý cho các buổi chạy
+  Object.keys(days).forEach(function (k) {
+    var s = days[k];
+    if (s.type === 'race') {
+      s.pace = GOAL_PACE_VAL;
+      s.paceNote = 'mục tiêu 3:00 — nhanh hơn được nếu chân ổn';
+    } else if (s.type === 'run') {
+      s.pace = easyPace(spec.phase);
+      if (s.title === 'Long Run' && spec.goalPace) s.paceNote = spec.goalPace + 'km cuối @ ' + GOAL_PACE_VAL;
+      else if (s.title && s.title.indexOf('Strides') !== -1) s.paceNote = 'strides: ~20s nhanh theo cảm giác';
+    }
+  });
   return {
     index: idx,                 // 0-based
     num: idx + 1,               // hiển thị W1..W22

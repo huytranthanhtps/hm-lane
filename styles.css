@@ -74,6 +74,10 @@ button{font-family:inherit;cursor:pointer}
 .metric{font-family:var(--mono);font-weight:700;font-size:30px;color:var(--rust-glow);margin:6px 0 10px}
 .metric.mint{color:var(--mint)}
 .metric small{font-size:14px;color:var(--chalk-dim);font-weight:400}
+.pace{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin:-2px 0 12px}
+.pace .pl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-faint)}
+.pace b{font-family:var(--mono);color:var(--rust-glow);font-weight:700;font-size:15px}
+.pace i{font-style:normal;font-family:var(--mono);color:var(--chalk-faint);font-size:11px;width:100%}
 .desc{color:var(--chalk-dim);font-size:14px;line-height:1.55;margin-bottom:14px}
 .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
 .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--chalk-dim);border-radius:9px;padding:6px 10px;

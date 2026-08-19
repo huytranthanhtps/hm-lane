@@ -169,6 +169,10 @@
 
     if (s.type === 'run' || s.type === 'race') {
       html += '<div class="metric">' + s.km + ' <small>km</small></div>';
+      if (s.pace) {
+        html += '<div class="pace"><span class="pl">Pace gợi ý</span><b>' + s.pace + '</b>' +
+          (s.paceNote ? '<i>' + s.paceNote + '</i>' : '') + '</div>';
+      }
     } else if (s.type === 'strength' || s.type === 'mobility') {
       html += '<div class="metric mint">~' + s.dur + ' <small>phút · tại nhà</small></div>';
     }
@@ -226,9 +230,10 @@
       var done = isDone(dISO);
       var right = (s.type === 'run' || s.type === 'race') && s.km ? '<span class="km">' + s.km + ' km</span>' : '';
       var icon = s.type === 'run' || s.type === 'race' ? '🏃' : (s.type === 'strength' ? '💪' : (s.type === 'mobility' ? '🧘' : '·'));
+      var sub = DOW_VI[dow] + ' ' + dt.getDate() + '/' + (dt.getMonth() + 1) + (s.pace ? ' · ' + s.pace : '');
       return '<div class="day' + (done ? ' done' : '') + (isToday ? ' today' : '') + '" data-date="' + dISO + '" data-dow="' + dow + '">' +
         '<span class="dot ' + s.type + '">' + (done ? CHECK : icon) + '</span>' +
-        '<div class="meta"><div class="dname">' + s.title + '</div><div class="dsub">' + DOW_VI[dow] + ' ' + dt.getDate() + '/' + (dt.getMonth() + 1) + '</div></div>' +
+        '<div class="meta"><div class="dname">' + s.title + '</div><div class="dsub">' + sub + '</div></div>' +
         right + '</div>';
     }).join('');
 

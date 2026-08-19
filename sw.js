@@ -1,5 +1,5 @@
 /* HM Lane — service worker: offline app shell. */
-var CACHE = 'hmlane-v4';
+var CACHE = 'hmlane-v5';
 var SHELL = [
   './', 'index.html', 'styles.css', 'app.js', 'plan.js', 'exercises.js',
   'manifest.webmanifest',
