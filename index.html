@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>HM Lane</title>
+<meta name="description" content="Kế hoạch tập luyện Half Marathon cá nhân — 22 tuần tới ngày đua 17/01/2027.">
+<meta name="theme-color" content="#16130F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HM Lane">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="wordmark">HM<i>·</i>LANE</div>
+    <div class="wk-pill" id="wkPill">WK — / 22</div>
+  </header>
+
+  <main class="view" id="view"></main>
+
+  <nav class="nav" id="nav">
+    <button data-tab="today" class="active" aria-label="Hôm nay">
+      <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Today</button>
+    <button data-tab="week" aria-label="Tuần này">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</button>
+    <button data-tab="month" aria-label="Hoạt động tháng">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18"/><rect x="7" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/><rect x="13" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/></svg>Month</button>
+    <button data-tab="lane" aria-label="Toàn plan">
+      <svg viewBox="0 0 24 24"><path d="M6 3v18M6 6h9l-2 3 2 3H6"/></svg>Lane</button>
+    <button data-tab="progress" aria-label="Tiến độ">
+      <svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>Progress</button>
+    <button data-tab="exercises" aria-label="Bài tập">
+      <svg viewBox="0 0 24 24"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Bài tập</button>
+  </nav>
+</div>
+
+<script src="plan.js"></script>
+<script src="exercises.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

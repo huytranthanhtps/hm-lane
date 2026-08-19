@@ -1,0 +1,602 @@
+<title>HM Lane</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+
+<style>
+  :root{
+    --ink:#16130F; --ink-2:#1E1A14; --ink-3:#28231B;
+    --line:#3A3227; --line-soft:#2C2720;
+    --rust:#D24E1B; --rust-deep:#A83A13; --rust-glow:#E9642F;
+    --mint:#6FE0C0; --mint-deep:#39B394;
+    --chalk:#F2ECE0; --chalk-dim:#A79E8E; --chalk-faint:#6E6656;
+    --display:"Anton",Impact,sans-serif;
+    --body:"Archivo",system-ui,sans-serif;
+    --mono:"Space Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:
+      radial-gradient(120% 80% at 50% -10%, #221c14 0%, var(--ink) 55%);
+    color:var(--chalk); font-family:var(--body);
+    min-height:100vh; padding:40px 20px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- showcase chrome ---------- */
+  .intro{max-width:900px;margin:0 auto 40px;text-align:center}
+  .intro .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--rust-glow)}
+  .intro h1{font-family:var(--display);font-size:clamp(44px,9vw,84px);letter-spacing:.01em;line-height:.92;margin:14px 0 10px;text-transform:uppercase}
+  .intro h1 span{color:var(--rust)}
+  .intro p{color:var(--chalk-dim);max-width:56ch;margin:0 auto;font-size:15px;line-height:1.6}
+  .legend{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk-dim)}
+  .legend b{display:inline-flex;align-items:center;gap:7px;font-weight:400}
+  .swatch{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+  .stage{display:flex;gap:36px;justify-content:center;align-items:flex-start;flex-wrap:wrap;max-width:1400px;margin:0 auto}
+  .screen-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .screen-label{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--chalk-faint)}
+
+  /* ---------- phone frame ---------- */
+  .phone{
+    width:390px; max-width:92vw; height:812px; border-radius:44px;
+    background:var(--ink); border:1px solid var(--line);
+    box-shadow:0 40px 80px -30px rgba(0,0,0,.8), inset 0 0 0 8px #0c0a07;
+    padding:12px; position:relative; overflow:hidden;
+  }
+  .notch{position:absolute;top:16px;left:50%;transform:translateX(-50%);width:120px;height:26px;background:#0c0a07;border-radius:0 0 16px 16px;z-index:30}
+  .app{position:absolute;inset:12px;border-radius:34px;overflow:hidden;display:flex;flex-direction:column;background:var(--ink)}
+  .view{flex:1;overflow-y:auto;overflow-x:hidden;padding:44px 20px 86px}
+  .view::-webkit-scrollbar{width:0}
+
+  /* lane lines texture on top edge */
+  .app::before{content:"";position:absolute;top:0;left:0;right:0;height:44px;
+    background:linear-gradient(180deg,var(--ink) 60%,transparent);
+    z-index:5;pointer-events:none}
+
+  /* ---------- app header ---------- */
+  .topbar{position:absolute;top:14px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;z-index:10}
+  .wordmark{font-family:var(--display);font-size:17px;letter-spacing:.04em;text-transform:uppercase}
+  .wordmark i{color:var(--rust);font-style:normal}
+  .wk-pill{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--chalk-dim);border-radius:999px;padding:5px 12px;
+    background:linear-gradient(160deg,rgba(58,50,39,.5),rgba(30,26,20,.4));
+    backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid rgba(242,236,224,.12);box-shadow:0 1px 0 rgba(242,236,224,.12) inset}
+
+  /* ---------- countdown hero ---------- */
+  .phase-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--rust-glow);margin-bottom:2px}
+  .count{display:flex;align-items:baseline;gap:12px;margin:2px 0 0}
+  .count .num{font-family:var(--display);font-size:118px;line-height:.8;letter-spacing:-.01em}
+  .count .unit{font-family:var(--display);font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--chalk-dim);line-height:1;padding-bottom:8px}
+  .count-sub{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--chalk-faint);margin-top:2px;text-transform:uppercase}
+
+  /* progress lane strip */
+  .strip{display:flex;gap:3px;margin:20px 0 6px}
+  .strip i{flex:1;height:6px;border-radius:2px;background:var(--line);display:block}
+  .strip i.done{background:var(--mint)}
+  .strip i.now{background:var(--rust);box-shadow:0 0 12px var(--rust)}
+  .strip-cap{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--chalk-faint);text-transform:uppercase}
+
+  /* ---------- today session card ---------- */
+  .card{border-radius:22px;padding:20px;margin-top:22px;position:relative;overflow:hidden;
+    background:linear-gradient(165deg,rgba(54,47,36,.58),rgba(28,24,18,.5));
+    backdrop-filter:blur(20px) saturate(170%);-webkit-backdrop-filter:blur(20px) saturate(170%);
+    border:1px solid rgba(242,236,224,.12);
+    box-shadow:0 20px 44px -20px rgba(0,0,0,.7), 0 1px 0 rgba(242,236,224,.14) inset}
+  .card .rail{position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--rust)}
+  .card.run .rail{background:var(--rust)}
+  .card.strength .rail{background:var(--mint-deep)}
+  .card-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-dim)}
+  .tag{padding:3px 9px;border-radius:999px;font-size:10px;letter-spacing:.12em}
+  .tag.run{background:rgba(210,78,27,.16);color:var(--rust-glow)}
+  .tag.str{background:rgba(111,224,192,.14);color:var(--mint)}
+  .card h2{font-family:var(--display);font-size:34px;text-transform:uppercase;letter-spacing:.01em;margin:12px 0 2px;line-height:.95}
+  .metric{font-family:var(--mono);font-weight:700;font-size:30px;color:var(--rust-glow);margin:6px 0 10px}
+  .metric small{font-size:14px;color:var(--chalk-dim);font-weight:400}
+  .desc{color:var(--chalk-dim);font-size:14px;line-height:1.55;margin-bottom:14px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+  .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--chalk-dim);border-radius:9px;padding:6px 10px;
+    background:rgba(242,236,224,.05);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(242,236,224,.10);box-shadow:0 1px 0 rgba(242,236,224,.08) inset}
+  .chip b{color:var(--chalk);font-weight:700}
+
+  .tick{width:100%;border:none;border-radius:14px;padding:16px;font-family:var(--body);font-weight:800;font-size:15px;letter-spacing:.02em;text-transform:uppercase;color:#160f0a;background:var(--rust);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px}
+  .tick.done{background:transparent;color:var(--mint);border:1.5px solid var(--mint-deep)}
+  .tick svg{width:18px;height:18px}
+
+  .subnote{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);margin-top:14px;line-height:1.5;letter-spacing:.02em}
+
+  /* ---------- week list ---------- */
+  .day{display:flex;align-items:center;gap:14px;padding:14px 4px;border-bottom:1px solid var(--line-soft)}
+  .day .dot{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);font-size:11px;flex-shrink:0;border:1px solid var(--line)}
+  .day .dot.run{color:var(--rust-glow);border-color:rgba(210,78,27,.4)}
+  .day .dot.str{color:var(--mint);border-color:rgba(111,224,192,.35)}
+  .day .dot.rest{color:var(--chalk-faint)}
+  .day.done .dot{background:var(--mint);color:#0e120f;border-color:var(--mint)}
+  .day .meta{flex:1;min-width:0}
+  .day .meta .dname{font-size:14px;font-weight:600}
+  .day .meta .dsub{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);letter-spacing:.04em}
+  .day .km{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--chalk-dim)}
+  .day.done .dname{color:var(--chalk-dim);text-decoration:line-through;text-decoration-color:var(--line)}
+
+  /* ---------- the lane ---------- */
+  .lane-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .lane-head h2{font-family:var(--display);font-size:30px;text-transform:uppercase;letter-spacing:.01em}
+  .lane-head span{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);letter-spacing:.1em}
+  .lane{position:relative;margin-top:12px;padding-left:26px}
+  .lane::before{content:"";position:absolute;left:9px;top:6px;bottom:24px;width:2px;background:repeating-linear-gradient(180deg,var(--line) 0 8px,transparent 8px 16px)}
+  .seg{position:relative;display:flex;align-items:center;gap:12px;padding:9px 0}
+  .seg .node{position:absolute;left:-21px;width:14px;height:14px;border-radius:50%;background:var(--ink);border:2px solid var(--line)}
+  .seg.done .node{background:var(--mint);border-color:var(--mint)}
+  .seg.now .node{background:var(--rust);border-color:var(--rust);box-shadow:0 0 0 4px rgba(210,78,27,.25)}
+  .seg .wk{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);width:34px;flex-shrink:0}
+  .seg .bar{flex:1;height:28px;border-radius:9px;display:flex;align-items:center;padding:0 11px;justify-content:space-between;
+    background:linear-gradient(160deg,rgba(54,47,36,.42),rgba(28,24,18,.34));
+    backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);
+    border:1px solid rgba(242,236,224,.10);box-shadow:0 1px 0 rgba(242,236,224,.08) inset}
+  .seg .bar .lr{font-size:12px;color:var(--chalk-dim);font-weight:500}
+  .seg .bar .val{font-family:var(--mono);font-size:12px;font-weight:700}
+  .seg.now .bar{border-color:var(--rust);background:rgba(210,78,27,.08)}
+  .seg.now .bar .val{color:var(--rust-glow)}
+  .seg.done .bar .val{color:var(--mint)}
+  .phase-div{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--chalk-faint);margin:16px 0 4px;padding-left:2px;display:flex;align-items:center;gap:8px}
+  .phase-div::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+  .finish{position:relative;margin-top:8px;padding:14px 16px;border-radius:12px;background:
+    repeating-conic-gradient(from 0deg,var(--ink-3) 0deg 90deg,var(--ink-2) 90deg 180deg) 0 0/16px 16px;
+    border:1px solid var(--rust);display:flex;justify-content:space-between;align-items:center}
+  .finish .node{position:absolute;left:5px;width:14px;height:14px;border-radius:50%;background:var(--rust);border:2px solid var(--rust);left:-21px}
+  .finish .rname{font-family:var(--display);font-size:20px;text-transform:uppercase;color:var(--chalk)}
+  .finish .rsub{font-family:var(--mono);font-size:11px;color:var(--rust-glow);letter-spacing:.08em}
+
+  /* ---------- progress ---------- */
+  .p-hero{text-align:center;padding:8px 0 4px}
+  .p-hero .big{font-family:var(--display);font-size:88px;line-height:.85;color:var(--mint)}
+  .p-hero .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--chalk-dim);margin-top:6px}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+  .stat{border-radius:18px;padding:16px;
+    background:linear-gradient(160deg,rgba(54,47,36,.5),rgba(28,24,18,.42));
+    backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+    border:1px solid rgba(242,236,224,.11);box-shadow:0 14px 30px -18px rgba(0,0,0,.65), 0 1px 0 rgba(242,236,224,.12) inset}
+  .stat .v{font-family:var(--mono);font-weight:700;font-size:28px}
+  .stat .v.rust{color:var(--rust-glow)}
+  .stat .v.mint{color:var(--mint)}
+  .stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk-faint);margin-top:4px}
+  .ring-card{border-radius:18px;padding:18px;margin-top:12px;display:flex;align-items:center;gap:18px;
+    background:linear-gradient(160deg,rgba(54,47,36,.5),rgba(28,24,18,.42));
+    backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);
+    border:1px solid rgba(242,236,224,.11);box-shadow:0 14px 30px -18px rgba(0,0,0,.65), 0 1px 0 rgba(242,236,224,.12) inset}
+  .ring{width:78px;height:78px;flex-shrink:0}
+  .ring-txt .rt-big{font-family:var(--mono);font-weight:700;font-size:20px}
+  .ring-txt .rt-lbl{font-size:13px;color:var(--chalk-dim);margin-top:2px}
+  .ring-txt .rt-sub{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);margin-top:4px;letter-spacing:.06em}
+
+  /* ---------- bottom nav : liquid-glass floating island ---------- */
+  .nav{
+    position:absolute; left:16px; right:16px; bottom:14px; z-index:20;
+    display:flex; gap:3px; padding:5px;
+    border-radius:22px;
+    background:linear-gradient(160deg, rgba(58,50,39,.62), rgba(30,26,20,.52));
+    backdrop-filter:blur(22px) saturate(180%);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);
+    border:1px solid rgba(242,236,224,.14);
+    box-shadow:
+      0 16px 34px -14px rgba(0,0,0,.7),
+      0 1px 0 rgba(242,236,224,.22) inset,
+      0 -8px 20px -18px rgba(0,0,0,.6) inset;
+  }
+  .nav a{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:var(--chalk-dim); text-decoration:none;
+    font-family:var(--mono); font-size:8.5px; letter-spacing:.06em; text-transform:uppercase;
+    padding:6px 4px 5px; border-radius:16px; position:relative;
+    transition:color .2s ease, background .2s ease;
+  }
+  .nav a.active{
+    color:var(--rust-glow);
+    background:linear-gradient(180deg, rgba(233,100,47,.22), rgba(210,78,27,.10));
+    box-shadow:0 1px 0 rgba(242,236,224,.16) inset, 0 6px 14px -8px rgba(210,78,27,.6);
+  }
+  .nav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+  /* ---------- strength exercise list ---------- */
+  .ex-head{display:flex;justify-content:space-between;align-items:baseline;margin:18px 2px 4px}
+  .ex-head .h{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--chalk-dim)}
+  .ex-head .c{font-family:var(--mono);font-size:11px;color:var(--chalk-faint)}
+  .ex{display:flex;align-items:center;gap:13px;padding:13px 2px;border-bottom:1px solid var(--line-soft)}
+  .ex .ck{width:26px;height:26px;border-radius:50%;border:1.6px solid var(--line);flex-shrink:0;display:grid;place-items:center}
+  .ex.done .ck{background:var(--mint);border-color:var(--mint)}
+  .ex.done .ck svg{width:14px;height:14px;stroke:#0e120f}
+  .ex .info{flex:1;min-width:0}
+  .ex .info .en{font-size:14px;font-weight:600;display:flex;align-items:center;gap:7px}
+  .ex .info .cue{font-family:var(--mono);font-size:10.5px;color:var(--chalk-faint);letter-spacing:.02em;margin-top:2px}
+  .ex .sets{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--chalk-dim);flex-shrink:0}
+  .ex.done .en{color:var(--chalk-dim)}
+  .keytag{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--rust-glow);border:1px solid rgba(210,78,27,.45);border-radius:5px;padding:2px 5px;font-weight:400}
+  .why{background:rgba(111,224,192,.06);border:1px solid rgba(111,224,192,.22);border-radius:12px;padding:12px 14px;margin-top:16px;font-size:12.5px;line-height:1.55;color:var(--chalk-dim)}
+  .why b{color:var(--mint)}
+
+  .section-title{font-family:var(--display);font-size:26px;text-transform:uppercase;letter-spacing:.01em;margin-bottom:2px}
+  .section-sub{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);letter-spacing:.08em;margin-bottom:14px}
+
+  @media (max-width:460px){
+    body{padding:24px 8px 40px}
+    .phone{height:760px}
+  }
+  /* ---------- month heatmap ---------- */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 16px}
+  .cal-title{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk)}
+  .cal-nav{width:34px;height:34px;border-radius:11px;font-size:19px;line-height:1;color:var(--chalk-dim);border:1px solid rgba(242,236,224,.12);background:linear-gradient(160deg,rgba(58,50,39,.5),rgba(30,26,20,.4))}
+  .cal-legend{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--chalk-faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+  .cal-legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  .cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+  .cal-dows span{font-family:var(--mono);font-size:10px;color:var(--chalk-faint);text-align:center}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal-cell{aspect-ratio:1;border-radius:8px;background:var(--ink-2);border:1px solid var(--line-soft);display:grid;place-items:center}
+  .cal-cell .dn{font-family:var(--mono);font-size:11px;color:var(--chalk-faint)}
+  .cal-cell.empty{background:transparent;border:none}
+  .cal-cell.rest{background:rgba(242,236,224,.03);border-color:transparent}
+  .cal-cell.rest .dn{color:var(--line)}
+  .cal-cell.planned{border-style:dashed;border-color:var(--line)}
+  .cal-cell.missed{border-color:rgba(210,78,27,.22)}
+  .cal-cell.today{outline:2px solid var(--rust-glow);outline-offset:1px}
+  .lvl-run1{background:rgba(210,78,27,.30);border-color:transparent}
+  .lvl-run2{background:rgba(210,78,27,.52);border-color:transparent}
+  .lvl-run3{background:rgba(210,78,27,.74);border-color:transparent}
+  .lvl-run4{background:var(--rust);border-color:transparent}
+  .lvl-str{background:rgba(111,224,192,.62);border-color:transparent}
+  .cal-cell.lvl-run3 .dn,.cal-cell.lvl-run4 .dn,.cal-cell.lvl-str .dn{color:#160f0a;font-weight:700}
+  .cal-cell.lvl-run1 .dn,.cal-cell.lvl-run2 .dn{color:var(--chalk)}
+  .cal-summary{border-radius:16px;padding:16px;margin-top:18px;background:linear-gradient(160deg,rgba(54,47,36,.5),rgba(28,24,18,.42));border:1px solid rgba(242,236,224,.11);box-shadow:0 1px 0 rgba(242,236,224,.12) inset}
+  .cal-summary .s-big{font-family:var(--mono);font-weight:700;font-size:18px}
+  .cal-summary .s-lbl{font-size:13px;color:var(--chalk-dim);margin-top:3px}
+  .cal-summary .s-sub{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);margin-top:4px}
+</style>
+
+<div class="intro">
+  <div class="kicker">Design Mockup · Mobile-first PWA</div>
+  <h1>HM <span>Lane</span></h1>
+  <p>Bạn đồng hành tập luyện Half Marathon — mở lên là thấy buổi hôm nay, tick hoàn thành, và nhìn cả đường chạy 22 tuần tới vạch đích 17/01/2027. Thẩm mỹ lấy từ mặt sân điền kinh tartan &amp; số báo danh race.</p>
+  <div class="legend">
+    <b><span class="swatch" style="background:#D24E1B"></span> Rust — chạy / nhận diện</b>
+    <b><span class="swatch" style="background:#6FE0C0"></span> Mint — đã hoàn thành</b>
+    <b><span class="swatch" style="background:#16130F;border:1px solid #3A3227"></span> Warm ink — nền</b>
+  </div>
+</div>
+
+<div class="stage">
+
+  <!-- ============ SCREEN 1 : TODAY ============ -->
+  <div class="screen-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="app">
+        <div class="topbar">
+          <div class="wordmark">HM<i>·</i>LANE</div>
+          <div class="wk-pill">WK 01 / 22</div>
+        </div>
+        <div class="view">
+          <div class="phase-eyebrow">Reset · Lấy lại nền</div>
+          <div class="count">
+            <span class="num">151</span>
+            <span class="unit">ngày</span>
+          </div>
+          <div class="count-sub">tới HM 21.1K · 17 JAN 2027</div>
+
+          <div class="strip" title="tiến độ 22 tuần">
+            <i class="now"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div class="strip-cap"><span>Tuần 1</span><span>Race</span></div>
+
+          <div class="card run">
+            <div class="rail"></div>
+            <div class="card-top">
+              <span>Hôm nay · T4 19 THG 8</span>
+              <span class="tag run">Chạy</span>
+            </div>
+            <h2>Easy Run</h2>
+            <div class="metric">3.5 <small>km</small></div>
+            <div class="desc">Chạy nhẹ, run-walk nếu cần — nhịp thở còn nói chuyện được. Mục tiêu là cho chân làm quen lại, không gắng sức.</div>
+            <div class="chips">
+              <span class="chip">Zone <b>2</b></span>
+              <span class="chip">Cadence <b>170+</b></span>
+              <span class="chip">Pace thoải mái</span>
+            </div>
+            <button class="tick">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Đánh dấu hoàn thành
+            </button>
+            <div class="subnote">Tuần này chỉ T4 · T5 · T6 (bận cuối tuần) — chia nhẹ ~10km để đủ chỉ tiêu CLB mà không quá tải.</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <a class="active"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Today</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18"/><rect x="7" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/><rect x="13" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/></svg>Month</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 3v18M6 6h9l-2 3 2 3H6"/></svg>Lane</a>
+          <a><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>Progress</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Bài tập</a>
+        </nav>
+      </div>
+    </div>
+    <div class="screen-label">01 · Today (ngày chạy)</div>
+  </div>
+
+  <!-- ============ SCREEN 2 : STRENGTH DAY ============ -->
+  <div class="screen-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="app">
+        <div class="topbar">
+          <div class="wordmark">HM<i>·</i>LANE</div>
+          <div class="wk-pill">WK 02 / 22</div>
+        </div>
+        <div class="view">
+          <div class="phase-eyebrow">Nền tảng · Bổ trợ</div>
+          <div class="count">
+            <span class="num">146</span>
+            <span class="unit">ngày</span>
+          </div>
+          <div class="count-sub">tới HM 21.1K · 17 JAN 2027</div>
+
+          <div class="card strength">
+            <div class="rail"></div>
+            <div class="card-top">
+              <span>Hôm nay · T4 26 THG 8</span>
+              <span class="tag str">Bổ trợ</span>
+            </div>
+            <h2>Strength A</h2>
+            <div class="metric" style="color:var(--mint)">~35 <small>phút · tại nhà</small></div>
+            <div class="desc">Xây sức mạnh chân &amp; hông để chân chịu nổi quãng dài. Nghỉ 60–90s giữa các set.</div>
+
+            <div class="ex-head"><span class="h">5 bài · tạ + dây</span><span class="c">1/5 xong</span></div>
+
+            <div class="ex done">
+              <span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <div class="info"><div class="en">Goblet Squat</div><div class="cue">Tạ đơn · xuống sâu, gót chạm sàn</div></div>
+              <span class="sets">3×10</span>
+            </div>
+            <div class="ex">
+              <span class="ck"></span>
+              <div class="info"><div class="en">Eccentric Calf Raise <span class="keytag">Cổ chân</span></div><div class="cue">Hạ chậm 3 giây · trên bậc</div></div>
+              <span class="sets">3×12</span>
+            </div>
+            <div class="ex">
+              <span class="ck"></span>
+              <div class="info"><div class="en">Bulgarian Split Squat</div><div class="cue">Tạ đơn · từng chân</div></div>
+              <span class="sets">3×8</span>
+            </div>
+            <div class="ex">
+              <span class="ck"></span>
+              <div class="info"><div class="en">Tibialis Raise <span class="keytag">Cẳng chân</span></div><div class="cue">Dựa tường · kéo mũi chân lên</div></div>
+              <span class="sets">3×15</span>
+            </div>
+            <div class="ex">
+              <span class="ck"></span>
+              <div class="info"><div class="en">Banded Lateral Walk</div><div class="cue">Dây kháng lực · cơ mông bên</div></div>
+              <span class="sets">3×15</span>
+            </div>
+
+            <div class="why"><b>Vì sao?</b> 2 bài gắn thẻ cổ chân/cẳng chân trực tiếp trị điểm đau 12–15km của bạn. Chân khỏe hơn = ít chuột rút ở 15km+.</div>
+
+            <button class="tick" style="background:var(--mint);color:#0e120f;margin-top:16px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              Hoàn thành buổi bổ trợ
+            </button>
+          </div>
+        </div>
+        <nav class="nav">
+          <a class="active"><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Today</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18"/><rect x="7" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/><rect x="13" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/></svg>Month</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 3v18M6 6h9l-2 3 2 3H6"/></svg>Lane</a>
+          <a><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>Progress</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Bài tập</a>
+        </nav>
+      </div>
+    </div>
+    <div class="screen-label">02 · Today (ngày bổ trợ)</div>
+  </div>
+
+  <!-- ============ SCREEN 3 : THE LANE ============ -->
+  <div class="screen-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="app">
+        <div class="topbar">
+          <div class="wordmark">HM<i>·</i>LANE</div>
+          <div class="wk-pill">22 TUẦN</div>
+        </div>
+        <div class="view">
+          <div class="lane-head">
+            <h2>The Lane</h2>
+            <span>19/8 → 17/1</span>
+          </div>
+
+          <div class="phase-div">Reset</div>
+          <div class="lane">
+            <div class="seg now"><span class="node"></span><span class="wk">W1</span><div class="bar"><span class="lr">Reset · 3×easy</span><span class="val">10 km</span></div></div>
+            <div class="seg"><span class="node"></span><span class="wk">W2</span><div class="bar"><span class="lr">Long run</span><span class="val">6 km</span></div></div>
+            <div class="seg"><span class="node"></span><span class="wk">W3</span><div class="bar"><span class="lr">Long run</span><span class="val">8 km</span></div></div>
+          </div>
+
+          <div class="phase-div">Nền tảng</div>
+          <div class="lane">
+            <div class="seg"><span class="node"></span><span class="wk">W4</span><div class="bar"><span class="lr">Long run</span><span class="val">10 km</span></div></div>
+            <div class="seg"><span class="node"></span><span class="wk">W5</span><div class="bar"><span class="lr">Deload</span><span class="val">8 km</span></div></div>
+            <div class="seg"><span class="node"></span><span class="wk">W6</span><div class="bar"><span class="lr">Long run</span><span class="val">12 km</span></div></div>
+            <div class="seg"><span class="node"></span><span class="wk">W7</span><div class="bar"><span class="lr">Long run</span><span class="val">14 km</span></div></div>
+            <div class="seg"><span class="node"></span><span class="wk">W9</span><div class="bar"><span class="lr">Long run</span><span class="val">16 km</span></div></div>
+          </div>
+
+          <div class="phase-div">Chuyên biệt</div>
+          <div class="lane">
+            <div class="seg"><span class="node"></span><span class="wk">W12</span><div class="bar"><span class="lr">+ tiếp điện giải</span><span class="val">18 km</span></div></div>
+            <div class="seg"><span class="node"></span><span class="wk">W16</span><div class="bar"><span class="lr">Đỉnh · full HM</span><span class="val">21 km</span></div></div>
+          </div>
+
+          <div class="phase-div">Taper</div>
+          <div class="lane">
+            <div class="seg"><span class="node"></span><span class="wk">W21</span><div class="bar"><span class="lr">Taper sâu</span><span class="val">8 km</span></div></div>
+          </div>
+          <div class="lane" style="padding-bottom:8px">
+            <div class="finish">
+              <span class="node"></span>
+              <div><div class="rname">Race Day</div><div class="rsub">CN 17/01 · 21.1 KM</div></div>
+              <div style="font-family:var(--display);font-size:26px;color:var(--rust-glow)">3:00</div>
+            </div>
+          </div>
+        </div>
+        <nav class="nav">
+          <a><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Today</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18"/><rect x="7" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/><rect x="13" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/></svg>Month</a>
+          <a class="active"><svg viewBox="0 0 24 24"><path d="M6 3v18M6 6h9l-2 3 2 3H6"/></svg>Lane</a>
+          <a><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>Progress</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Bài tập</a>
+        </nav>
+      </div>
+    </div>
+    <div class="screen-label">03 · The Lane (toàn plan)</div>
+  </div>
+
+  <!-- ============ SCREEN 3 : PROGRESS ============ -->
+  <div class="screen-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="app">
+        <div class="topbar">
+          <div class="wordmark">HM<i>·</i>LANE</div>
+          <div class="wk-pill">WK 01 / 22</div>
+        </div>
+        <div class="view">
+          <div class="section-title">Tiến độ</div>
+          <div class="section-sub">Reset · Tuần 1</div>
+
+          <div class="p-hero">
+            <div class="big">1</div>
+            <div class="lbl">Ngày streak 🔥</div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat"><div class="v mint">1<small style="font-size:15px;color:var(--chalk-faint)"> /3</small></div><div class="k">Buổi tuần này</div></div>
+            <div class="stat"><div class="v rust">3.5</div><div class="k">KM đã chạy</div></div>
+            <div class="stat"><div class="v">151</div><div class="k">Ngày tới race</div></div>
+            <div class="stat"><div class="v">4<small style="font-size:15px;color:var(--chalk-faint)">%</small></div><div class="k">Chặng hoàn tất</div></div>
+          </div>
+
+          <div class="ring-card">
+            <svg class="ring" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#3A3227" stroke-width="4"/>
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#6FE0C0" stroke-width="4" stroke-linecap="round"
+                stroke-dasharray="97.4" stroke-dashoffset="63.3" transform="rotate(-90 18 18)"/>
+              <text x="18" y="20.5" text-anchor="middle" fill="#F2ECE0" font-family="Space Mono, monospace" font-size="8" font-weight="700">35%</text>
+            </svg>
+            <div class="ring-txt">
+              <div class="rt-big">3.5 / 10 km</div>
+              <div class="rt-lbl">Chỉ tiêu CLB tuần này</div>
+              <div class="rt-sub">Còn 6.5 km · T5 &amp; T6</div>
+            </div>
+          </div>
+
+          <div class="ring-card" style="margin-top:12px">
+            <svg class="ring" viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#3A3227" stroke-width="4"/>
+              <circle cx="18" cy="18" r="15.5" fill="none" stroke="#D24E1B" stroke-width="4" stroke-linecap="round"
+                stroke-dasharray="97.4" stroke-dashoffset="93.0" transform="rotate(-90 18 18)"/>
+              <text x="18" y="20.5" text-anchor="middle" fill="#F2ECE0" font-family="Space Mono, monospace" font-size="7" font-weight="700">W1/22</text>
+            </svg>
+            <div class="ring-txt">
+              <div class="rt-big">Reset</div>
+              <div class="rt-lbl">Giai đoạn hiện tại</div>
+              <div class="rt-sub">Long run tối đa: 21 km @ W16</div>
+            </div>
+          </div>
+        </div>
+        <nav class="nav">
+          <a><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Today</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18"/><rect x="7" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/><rect x="13" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/></svg>Month</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 3v18M6 6h9l-2 3 2 3H6"/></svg>Lane</a>
+          <a class="active"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>Progress</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Bài tập</a>
+        </nav>
+      </div>
+    </div>
+    <div class="screen-label">04 · Progress</div>
+  </div>
+
+  <!-- ============ SCREEN 5 : MONTH (heatmap) ============ -->
+  <div class="screen-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="app">
+        <div class="topbar">
+          <div class="wordmark">HM<i>·</i>LANE</div>
+          <div class="wk-pill">WK 08 / 22</div>
+        </div>
+        <div class="view">
+          <div class="section-title">Hoạt động</div>
+          <div class="cal-head">
+            <button class="cal-nav">‹</button>
+            <div class="cal-title">Tháng 10 2026</div>
+            <button class="cal-nav">›</button>
+          </div>
+          <div class="cal-legend"><span>Ít</span>
+            <i class="lvl-run1"></i><i class="lvl-run2"></i><i class="lvl-run3"></i><i class="lvl-run4"></i>
+            <span>Nhiều</span><i class="lvl-str" style="margin-left:10px"></i><span>Bổ trợ</span></div>
+          <div class="cal-dows"><span>T2</span><span>T3</span><span>T4</span><span>T5</span><span>T6</span><span>T7</span><span>CN</span></div>
+          <div class="cal-grid">
+            <div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div>
+            <div class="cal-cell lvl-run2"><span class="dn">1</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">2</span></div>
+            <div class="cal-cell lvl-run3"><span class="dn">3</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">4</span></div>
+            <div class="cal-cell rest"><span class="dn">5</span></div>
+            <div class="cal-cell lvl-run2"><span class="dn">6</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">7</span></div>
+            <div class="cal-cell missed"><span class="dn">8</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">9</span></div>
+            <div class="cal-cell lvl-run2"><span class="dn">10</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">11</span></div>
+            <div class="cal-cell rest"><span class="dn">12</span></div>
+            <div class="cal-cell lvl-run2"><span class="dn">13</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">14</span></div>
+            <div class="cal-cell lvl-run2"><span class="dn">15</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">16</span></div>
+            <div class="cal-cell lvl-run3"><span class="dn">17</span></div>
+            <div class="cal-cell lvl-str"><span class="dn">18</span></div>
+            <div class="cal-cell rest"><span class="dn">19</span></div>
+            <div class="cal-cell lvl-run2 today"><span class="dn">20</span></div>
+            <div class="cal-cell planned"><span class="dn">21</span></div>
+            <div class="cal-cell planned"><span class="dn">22</span></div>
+            <div class="cal-cell planned"><span class="dn">23</span></div>
+            <div class="cal-cell planned"><span class="dn">24</span></div>
+            <div class="cal-cell planned"><span class="dn">25</span></div>
+            <div class="cal-cell rest"><span class="dn">26</span></div>
+            <div class="cal-cell planned"><span class="dn">27</span></div>
+            <div class="cal-cell planned"><span class="dn">28</span></div>
+            <div class="cal-cell planned"><span class="dn">29</span></div>
+            <div class="cal-cell planned"><span class="dn">30</span></div>
+            <div class="cal-cell planned"><span class="dn">31</span></div>
+          </div>
+          <div class="cal-summary">
+            <div class="s-big">16 buổi · 74 km</div>
+            <div class="s-lbl">Đã hoàn thành trong tháng 10</div>
+            <div class="s-sub">Dữ liệu ví dụ · viền = hôm nay · nét đứt = kế hoạch · chạm để tick</div>
+          </div>
+        </div>
+        <nav class="nav">
+          <a><svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Today</a>
+          <a><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</a>
+          <a class="active"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18"/><rect x="7" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/><rect x="13" y="12.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/></svg>Month</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 3v18M6 6h9l-2 3 2 3H6"/></svg>Lane</a>
+          <a><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6"/></svg>Progress</a>
+          <a><svg viewBox="0 0 24 24"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>Bài tập</a>
+        </nav>
+      </div>
+    </div>
+    <div class="screen-label">05 · Month (heatmap)</div>
+  </div>
+
+</div>
