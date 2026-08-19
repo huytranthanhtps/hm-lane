@@ -23,8 +23,13 @@ button{font-family:inherit;cursor:pointer}
 .app{display:flex;flex-direction:column;height:100dvh;max-width:520px;margin:0 auto;position:relative}
 
 /* ---------- top bar ---------- */
-.topbar{position:absolute;top:calc(var(--safe-top) + 12px);left:20px;right:20px;
-  display:flex;justify-content:space-between;align-items:center;z-index:10}
+.topbar{position:absolute;top:0;left:0;right:0;z-index:10;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:calc(var(--safe-top) + 12px) 20px 14px;
+  background:linear-gradient(180deg, rgba(22,19,15,.78) 0%, rgba(22,19,15,.5) 62%, rgba(22,19,15,0) 100%);
+  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  -webkit-mask-image:linear-gradient(180deg,#000 68%,transparent);
+  mask-image:linear-gradient(180deg,#000 68%,transparent)}
 .wordmark{font-family:var(--display);font-size:18px;letter-spacing:.04em;text-transform:uppercase}
 .wordmark i{color:var(--rust);font-style:normal}
 .wk-pill{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--chalk-dim);border-radius:999px;padding:5px 12px;
@@ -183,12 +188,12 @@ button{font-family:inherit;cursor:pointer}
 .cal-nav:active{color:var(--rust-glow)}
 .cal-legend{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--chalk-faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
 .cal-legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
-.cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:0 auto 6px;width:min(100%,330px)}
 .cal-dows span{font-family:var(--mono);font-size:10px;color:var(--chalk-faint);text-align:center;letter-spacing:.04em}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cal-cell{aspect-ratio:1;border-radius:8px;background:var(--ink-2);border:1px solid var(--line-soft);
-  display:grid;place-items:center;position:relative}
-.cal-cell .dn{font-family:var(--mono);font-size:11px;color:var(--chalk-faint)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:min(100%,330px);margin:0 auto}
+.cal-cell{aspect-ratio:1;min-width:0;border-radius:8px;background:var(--ink-2);border:1px solid var(--line-soft);
+  display:grid;place-items:center;position:relative;overflow:hidden}
+.cal-cell .dn{font-family:var(--mono);font-size:clamp(9px,2.6vw,11px);color:var(--chalk-faint)}
 .cal-cell.empty{background:transparent;border:none}
 .cal-cell.rest{background:rgba(242,236,224,.03);border-color:transparent}
 .cal-cell.rest .dn{color:var(--line)}
@@ -216,7 +221,7 @@ button{font-family:inherit;cursor:pointer}
 .routine .rfocus{color:var(--chalk-dim);font-size:13px;line-height:1.5;margin:10px 0 4px}
 
 /* ---------- bottom nav : liquid-glass floating island ---------- */
-.nav{position:absolute;left:16px;right:16px;bottom:calc(var(--safe-bot) + 12px);z-index:20;
+.nav{position:absolute;left:16px;right:16px;bottom:max(8px, calc(var(--safe-bot) - 8px));z-index:20;
   display:flex;gap:3px;padding:5px;border-radius:22px;
   background:linear-gradient(160deg,rgba(58,50,39,.62),rgba(30,26,20,.52));
   backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);

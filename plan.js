@@ -58,9 +58,9 @@ function buildWeek(idx) {
   if (spec.note === 'special') {
     days[1] = rest('Nghỉ');                       // T2
     days[2] = rest('Nghỉ · chưa bắt đầu');        // T3
-    days[3] = run('Easy Run', 3.5, 'Chạy lại nhẹ, run-walk thoải mái — thở còn nói chuyện được.', ['Zone 2', 'Cadence 170+', 'Không gắng sức']); // T4 (hôm nay)
-    days[4] = run('Easy Run', 3.5, 'Tiếp tục nhẹ nhàng. Nếu cổ chân/gối khó chịu thì đi bộ xen kẽ.', ['Zone 2', 'Run-walk OK']); // T5
-    days[5] = run('Easy Run', 3.0, 'Buổi cuối trong tuần — gom đủ ~10km chỉ tiêu CLB.', ['Zone 2', 'CLB 10km']); // T6
+    days[3] = run('Easy Run', 5, 'Buổi chạy lại đầu tiên — nhẹ nhàng, run-walk nếu cần, thở còn nói chuyện được.', ['Zone 2', 'Cadence 170+', 'Không gắng sức']); // T4 (hôm nay)
+    days[4] = strength('A');                       // T5 (bổ trợ, tận dụng ngày rảnh)
+    days[5] = run('Easy Run', 5, 'Buổi chạy thứ hai trong tuần. Giữ pace easy, cảm nhận chân — nếu ổn có thể hơn 5km.', ['Zone 2', 'Run-walk OK']); // T6
     days[6] = rest('Nghỉ · bận');                 // T7
     days[0] = rest('Nghỉ · bận');                 // CN
     return finalizeWeek(idx, spec, days, 10);
@@ -79,8 +79,8 @@ function buildWeek(idx) {
   }
 
   // Khung tuần chuẩn (W2..W21)
-  const e1 = easyKm(spec.lr, 0.45, 4, 8);
-  const e2 = easyKm(spec.lr, 0.40, 4, 7);
+  const e1 = easyKm(spec.lr, 0.45, 5, 9);
+  const e2 = easyKm(spec.lr, 0.40, 5, 8);
   const withStrides = spec.phase !== 'reset';
 
   days[1] = rest('Nghỉ');                                       // T2

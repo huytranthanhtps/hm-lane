@@ -196,7 +196,7 @@
         CHECK + (done ? 'Đã hoàn thành' : 'Đánh dấu hoàn thành') + '</button>';
     }
     if (s.type === 'run' && here.weekIdx === 0) {
-      html += '<div class="subnote">Tuần này chỉ T4·T5·T6 (bận cuối tuần) — chia nhẹ ~10km đủ chỉ tiêu CLB mà không quá tải.</div>';
+      html += '<div class="subnote">Tuần này: hôm nay &amp; T6 chạy (5km/buổi = 10km CLB), T5 tập bổ trợ. Cuối tuần bận nên nghỉ.</div>';
     }
     html += '</div>';
     return html;
