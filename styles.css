@@ -25,11 +25,10 @@ button{font-family:inherit;cursor:pointer}
 /* ---------- top bar ---------- */
 .topbar{position:absolute;top:0;left:0;right:0;z-index:10;
   display:flex;justify-content:space-between;align-items:center;
-  padding:calc(var(--safe-top) + 12px) 20px 14px;
-  background:linear-gradient(180deg, rgba(22,19,15,.78) 0%, rgba(22,19,15,.5) 62%, rgba(22,19,15,0) 100%);
-  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
-  -webkit-mask-image:linear-gradient(180deg,#000 68%,transparent);
-  mask-image:linear-gradient(180deg,#000 68%,transparent)}
+  padding:calc(var(--safe-top) + 12px) 20px 12px;
+  background:linear-gradient(180deg, rgba(22,19,15,.62), rgba(22,19,15,.30));
+  backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid rgba(242,236,224,.07)}
 .wordmark{font-family:var(--display);font-size:18px;letter-spacing:.04em;text-transform:uppercase}
 .wordmark i{color:var(--rust);font-style:normal}
 .wk-pill{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--chalk-dim);border-radius:999px;padding:5px 12px;
@@ -179,18 +178,18 @@ button{font-family:inherit;cursor:pointer}
 .ring-txt .rt-sub{font-family:var(--mono);font-size:11px;color:var(--chalk-faint);margin-top:4px;letter-spacing:.06em}
 
 /* ---------- month heatmap ---------- */
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 16px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px}
 .cal-title{font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk)}
-.cal-nav{width:36px;height:36px;border-radius:12px;font-size:20px;line-height:1;color:var(--chalk-dim);
+.cal-nav{width:32px;height:32px;border-radius:11px;font-size:18px;line-height:1;color:var(--chalk-dim);
   background:linear-gradient(160deg,rgba(58,50,39,.5),rgba(30,26,20,.4));
   backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
   border:1px solid rgba(242,236,224,.12);box-shadow:0 1px 0 rgba(242,236,224,.12) inset}
 .cal-nav:active{color:var(--rust-glow)}
-.cal-legend{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--chalk-faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
-.cal-legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
-.cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:0 auto 6px;width:min(100%,330px)}
+.cal-legend{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--chalk-faint);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.cal-legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:0 auto 4px;width:min(100%,300px)}
 .cal-dows span{font-family:var(--mono);font-size:10px;color:var(--chalk-faint);text-align:center;letter-spacing:.04em}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:min(100%,330px);margin:0 auto}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;width:min(100%,300px);margin:0 auto}
 .cal-cell{aspect-ratio:1;min-width:0;border-radius:8px;background:var(--ink-2);border:1px solid var(--line-soft);
   display:grid;place-items:center;position:relative;overflow:hidden}
 .cal-cell .dn{font-family:var(--mono);font-size:clamp(9px,2.6vw,11px);color:var(--chalk-faint)}
@@ -210,6 +209,7 @@ button{font-family:inherit;cursor:pointer}
 .lvl-str{background:rgba(111,224,192,.62);border-color:transparent}
 .cal-cell.lvl-run3 .dn,.cal-cell.lvl-run4 .dn,.cal-cell.lvl-str .dn{color:#160f0a;font-weight:700}
 .cal-cell.lvl-run1 .dn,.cal-cell.lvl-run2 .dn{color:var(--chalk)}
+.cal-sum{padding:14px 16px !important;gap:0 !important}
 
 /* ---------- routine block (exercises view) ---------- */
 .routine{border-radius:20px;padding:20px;margin-top:16px;

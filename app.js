@@ -340,8 +340,7 @@
     var daysInMonth = new Date(y, m + 1, 0).getDate();
     var todayISO = iso(TODAY);
 
-    var head = '<div class="section-title">Hoạt động</div>' +
-      '<div class="cal-head"><button class="cal-nav" data-mn="prev" aria-label="Tháng trước">‹</button>' +
+    var head = '<div class="cal-head"><button class="cal-nav" data-mn="prev" aria-label="Tháng trước">‹</button>' +
       '<div class="cal-title">' + MONTH_NAMES[m] + ' ' + y + '</div>' +
       '<button class="cal-nav" data-mn="next" aria-label="Tháng sau">›</button></div>';
 
@@ -381,7 +380,7 @@
       '<i class="lvl-run1"></i><i class="lvl-run2"></i><i class="lvl-run3"></i><i class="lvl-run4"></i>' +
       '<span>Nhiều</span><i class="lvl-str" style="margin-left:10px"></i><span>Bổ trợ</span></div>';
 
-    var summary = '<div class="ring-card" style="margin-top:18px">' +
+    var summary = '<div class="ring-card cal-sum" style="margin-top:12px">' +
       '<div class="ring-txt" style="flex:1"><div class="rt-big">' + monthDone + ' buổi · ' + (Math.round(monthKm * 10) / 10) + ' km</div>' +
       '<div class="rt-lbl">Đã hoàn thành trong ' + MONTH_NAMES[m].toLowerCase() + '</div>' +
       '<div class="rt-sub">Chạm ngày (hôm nay hoặc quá khứ) để đánh dấu</div></div></div>';
